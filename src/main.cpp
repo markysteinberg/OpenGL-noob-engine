@@ -19,6 +19,7 @@
 #include "model.h"
 #include "skybox.h"
 #include "grid.h" 
+#include "entity.h"
 
 int run() {
     LOG(INFO, "=== Startup: ", WINDOW_TITLE, " ", WINDOW_WIDTH, "x", WINDOW_HEIGHT, " FOV=", FOV, " ===");
@@ -34,12 +35,12 @@ int run() {
     glEnable(GL_DEPTH_TEST);
     LOG(INFO, "Depth test enabled"); 
 
+    std::vector<Entity> scene; 
 
-    /* +== MODELS ==+ */ 
+    /* +== SETUP MODELS ==+ */ 
     std::unordered_map<std::string, Model> models; 
     models.emplace("dog", load_model("assets/objects+textures/dog/13463_Australian_Cattle_Dog_v3.obj"));
     //models["ground"] = load_model("assets/objects+textures/ground/ground.obj");
-
 
     for (auto &[name, m] : models) {
         if (!m.valid) {
@@ -48,8 +49,13 @@ int run() {
         }
         m.setup();
     }
-    /* +== ====== ==+ */
-
+    /*
+    Entity dog(&models["dog"], 
+        glm::vec3(0.0f, 0.0f, 0.0f), 
+        glm::vec3(glm::radians(-90.0f), 0.0f, 0.0f),
+        glm::vec3(1.0f)
+    );
+    */
     Shader default_shader("assets/shaders/default.vert", "assets/shaders/default.frag");
 
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -60,6 +66,7 @@ int run() {
     GLuint diffuseLoc = glGetUniformLocation(default_shader.getID(), "diffuse");
     GLuint texLoc = glGetUniformLocation(default_shader.getID(), "diffuseTex");
     
+
     /* +== delta time =+ */
     float deltaTime = 0.0f;
     float lastFrame = 0.0f;
@@ -131,7 +138,10 @@ int run() {
 }
 
 int main(int argc, char* argv[]) { 
-    return run();
+    int result = run();
+    glfwTerminate();
+    LOG(INFO, "GLFW Terminated");
+    return result;
 }
 
 

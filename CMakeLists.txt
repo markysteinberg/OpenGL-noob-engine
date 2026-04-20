@@ -12,6 +12,7 @@ set(CPP_SOURCES
 	src/window.cpp 
 	src/skybox.cpp 
 	src/grid.cpp
+    src/entity.cpp
 )
 
 add_library(glad STATIC src/glad.c)
@@ -21,15 +22,15 @@ add_executable(enginetest ${CPP_SOURCES})
 
 target_compile_options(enginetest PRIVATE -Werror -Wall -Wpedantic -O0 -g)
 
+target_compile_features(enginetest PRIVATE cxx_std_20)
+
 target_include_directories(enginetest PRIVATE includes)
 
-target_link_libraries(enginetest PRIVATE
-    glad
-    glfw
-    GL
-    dl
-    assimp
-)
+if (UNIX)
+    target_link_libraries(enginetest PRIVATE glad glfw GL assimp dl) 
+else()
+    message(FATAL_ERROR "No compatibility")
+endif()
 
 
 

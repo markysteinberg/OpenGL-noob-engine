@@ -20,7 +20,7 @@
 #include "skybox.h"
 #include "grid.h" 
 
-int main(int argc, char* argv[]) { 
+int run() {
     LOG(INFO, "=== Startup: ", WINDOW_TITLE, " ", WINDOW_WIDTH, "x", WINDOW_HEIGHT, " FOV=", FOV, " ===");
 
     Window window(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE);
@@ -127,9 +127,13 @@ int main(int argc, char* argv[]) {
     }
     LOG(INFO, "=== Exiting render loop, shutting down ===");
 
-    glfwTerminate();
-
     return 0;
+}
+
+int main(int argc, char* argv[]) { 
+    int result = run();
+    glfwTerminate();
+    return result;
 }
 
 

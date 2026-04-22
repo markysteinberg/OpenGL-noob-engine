@@ -53,7 +53,7 @@ void Camera::attach(GLFWwindow* window) {
     
     glfwSetWindowUserPointer(window, this);
     glfwSetCursorPosCallback(window, mouseCallback);
-    if (useRaw) glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     // Trying to fix VMWare issue
     if (glfwRawMouseMotionSupported()) 
@@ -65,53 +65,26 @@ void Camera::attach(GLFWwindow* window) {
 void Camera::handleMouse(double xpos, double ypos) {
     if (!mouseCaptured) return;
 
-    int width, height;
-    glfwGetWindowSize(window, &width, &height);
-
     float xoffset, yoffset;
 
-    if (useRaw) { 
-        if (firstMouse) { 
-            lastX = xpos; 
-            lastY = ypos;
-            firstMouse = false;
-        }
 
-        xoffset = xpos - lastX;
-        yoffset = lastY - ypos;
-
-        lastX = xpos;
+    if (firstMouse) { 
+        lastX = xpos; 
         lastY = ypos;
+        firstMouse = false;
+    }
 
-        xoffset *= sensitivity;
-        yoffset *= sensitivity;
+    xoffset = xpos - lastX;
+    yoffset = lastY - ypos;
 
-        yaw += xoffset; 
-        pitch += yoffset;
-    } else { // Virtual Machine detected         
-        static float smoothX = 0.0f, smoothY = 0.0f;
+    lastX = xpos;
+    lastY = ypos;
 
-        if (firstMouse) {
-            glfwSetCursorPos(window, width / 2.0, height / 2.0);
-            firstMouse = false;
-            return;
-        }
+    xoffset *= sensitivity;
+    yoffset *= sensitivity;
 
-        xoffset = xpos - width / 2.0f;
-        yoffset = height / 2.0f - ypos;
-
-        glfwSetCursorPos(window, width / 2.0, height / 2.0);
-
-        xoffset *= std::clamp(xoffset, -50.0f, 50.0f);
-        yoffset *= std::clamp(yoffset, -50.0f, 50.0f);
-
-        float alpha = 0.15f;
-        smoothX = smoothX * (1.0f - alpha) + xoffset * alpha;
-        smoothY = smoothY * (1.0f - alpha) + yoffset * alpha;
-
-        yaw += smoothX * sensitivity;
-        pitch += smoothY * sensitivity; 
-    }   
+    yaw += xoffset; 
+    pitch += yoffset;
     
     if (pitch > 89.0f) pitch = 89.0f;
     if (pitch < -89.0f) pitch = -89.0f;

@@ -79,11 +79,6 @@ int run(int argc, char* argv[]) {
 
     Camera camera;
     camera.attach(window.get());
-    for (int i = 0; i < argc; i++) {
-        if (std::string(argv[i]) == "--vm") {
-            camera.setUseRaw(false); 
-        }
-    }
 
     Skybox skybox; 
     

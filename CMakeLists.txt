@@ -1,6 +1,29 @@
-cmake_minimum_required(VERSION 3.10)
-
+cmake_minimum_required(VERSION 3.20)
 project(GameEngine CXX C)
+
+include(FetchContent) 
+
+find_package(glfw3 QUIET) 
+find_package(glm QUIET)
+find_package(assimp QUIET)
+
+#GLFW 
+if(NOT glfw3_FOUND)
+	FetchContent_Declare(glfw GIT_REPOSITORY https://github.com/glfw/glfw.git GIT_TAG 3.3.8)
+	FetchContent_MakeAvailable(glfw)
+endif() 
+
+#GLM
+if(NOT glm_FOUND) 
+	FetchContent_Declare(glm GIT_REPOSITORY https://github.com/g-truc/glm.git) 
+	FetchContent_MakeAvailable(glm)
+endif() 
+
+#Assimp
+if(NOT assimp_FOUND)
+	FetchContent_Declare(assimp GIT_REPOSITORY https://github.com/assimp/assimp.git)
+	FetchContent_MakeAvailable(assimp)
+endif()
 
 set(CPP_SOURCES 
     src/main.cpp 

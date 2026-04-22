@@ -51,6 +51,7 @@ void Camera::attach(GLFWwindow* window) {
     glfwSetWindowUserPointer(window, this);
     glfwSetCursorPosCallback(window, mouseCallback);
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
     LOG(INFO, "Camera attached to window, cursor captured");
 }
 

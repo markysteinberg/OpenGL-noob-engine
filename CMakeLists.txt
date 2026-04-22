@@ -3,6 +3,8 @@ project(GameEngine CXX C)
 
 include(FetchContent) 
 
+set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
+
 #GLFW 
 find_package(glfw3 QUIET) 
 if(NOT glfw3_FOUND)
@@ -53,7 +55,11 @@ target_include_directories(glad PUBLIC includes)
 
 add_executable(enginetest ${CPP_SOURCES})
 
-target_compile_options(enginetest PRIVATE -Werror -Wall -Wpedantic -O0 -g)
+if(MSVC)
+	target_compile_options(enginetest PRIVATE /W4 /WX)
+else()
+	target_compile_options(enginetest PRIVATE -Werror -Wall -Wpedantic -O0 -g)
+endif()
 target_compile_features(enginetest PRIVATE cxx_std_20)
 
 target_include_directories(enginetest PRIVATE includes)

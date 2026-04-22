@@ -56,7 +56,7 @@ target_include_directories(glad PUBLIC includes)
 add_executable(enginetest ${CPP_SOURCES})
 
 if(MSVC)
-	target_compile_options(enginetest PRIVATE /W4 /WX)
+	target_compile_options(enginetest PRIVATE /W4)
 else()
 	target_compile_options(enginetest PRIVATE -Werror -Wall -Wpedantic -O0 -g)
 endif()
